@@ -60,7 +60,5 @@ const personWithValidation = withValidation(person, {
 })
 
 console.log(personWithValidation)
-
 personWithValidation.age = 42
-
 console.log(personWithValidation)
