@@ -1,14 +1,9 @@
 const fetch = require('node-fetch')
 
-const promiseCollection = []
-const handledPromiseCollection = []
-
-for (let i = 1; i <= 9; i++) {
-    promiseCollection.push(`https://jsonplaceholder.typicode.com/todos/${i}`)
-}
-
-async function* handlePromisesGenerator(promiseArr) {
+async function* handlePromisesGenerator(promiseArr, fetch) {
     let handledPromise
+    const handledPromiseCollection = []
+
     for (let promise of promiseArr) {
         handledPromise = await fetch(promise)
         if (handledPromise.status === 200) {
@@ -19,13 +14,17 @@ async function* handlePromisesGenerator(promiseArr) {
     }
 }
 
+const promiseCollection = []
+
+for (let i = 1; i <= 9; i++) {
+    promiseCollection.push(`https://jsonplaceholder.typicode.com/todos/${i}`)
+}
+
 (async () => {
     try {
-        console.time()
-        for await (let promise of handlePromisesGenerator(promiseCollection)) {
+        for await (let promise of handlePromisesGenerator(promiseCollection, fetch)) {
             console.log(promise)
         }
-        console.timeEnd()
     } catch(error) {
         throw new Error(error)
     }
