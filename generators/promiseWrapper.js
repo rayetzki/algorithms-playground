@@ -17,17 +17,12 @@ async function* handlePromisesGenerator(arrayOfLinks) {
 }
 
 const arrayOfLinks = [];
-
 for (let i = 1; i <= 100; i++) {
   arrayOfLinks.push(fetch(`https://jsonplaceholder.typicode.com/todos/${i}`));
 }
 
 (async () => {
-  try {
-    for await (let promise of handlePromisesGenerator(arrayOfLinks)) {
-      console.log(promise);
-    }
-  } catch (error) {
-    throw new Error(error);
+  for await (let promise of handlePromisesGenerator(arrayOfLinks)) {
+    console.log(promise);
   }
 })();

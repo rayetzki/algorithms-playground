@@ -1,38 +1,29 @@
-class Publisher {
-  constructor() {
-    this.subscribers = [];
-
-    this.subscribe = function (method, pubType = "any") {
-      if (!this.subscribers[pubType]) this.subscribers[pubType] = [];
-      this.subscribers[pubType].push(method);
-    };
-
-    this.visitSubscribers = function (action, arg, pubType = "any") {
-      this.subscribers[pubType].forEach((subscriber, index) => {
-        if (action === "publish") {
-          subscriber(arg);
-        } else if (subscriber === arg) {
-          this.subscribers.splice(index, 1);
-        }
-      });
-    };
-
-    this.publish = function (publication, pubType) {
-      this.visitSubscribers("publish", publication, pubType);
-    };
-
-    this.unsubscribe = function (method, pubType) {
-      this.visitSubscribers("unsubscribe", method, pubType);
-    };
-  }
-}
+const Publisher = {
+  subscribers: [],
+  subscribe(method, pubType = "any") {
+    if (!this.subscribers[pubType]) this.subscribers[pubType] = [];
+    this.subscribers[pubType].push(method);
+  },
+  visitSubscribers(action, arg, pubType = "any") {
+    if (action === "publish") {
+      this.subscribers[pubType].forEach((subscriber) => subscriber(arg));
+    } else {
+      this.subscribers.splice(index, 1);
+    }
+  },
+  publish(publication, pubType) {
+    this.visitSubscribers("publish", publication, pubType);
+  },
+  unsubscribe(method, pubType) {
+    this.visitSubscribers("unsubscribe", method, pubType);
+  },
+};
 
 const publisherFactory = (candidate) => {
-  const publisher = new Publisher();
-  for (method in publisher) {
-    candidate[method] = publisher[method];
-  }
   candidate.subscribers = [];
+  for (method in Publisher) {
+    candidate[method] = Publisher[method];
+  }
 };
 
 class Paper {
