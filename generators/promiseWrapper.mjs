@@ -1,7 +1,7 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 async function* handlePromisesGenerator(arrayOfLinks) {
-  for (let promise of arrayOfLinks) {
+  for (const promise of arrayOfLinks) {
     try {
       const response = await promise;
       if (response) {
@@ -21,8 +21,6 @@ for (let i = 1; i <= 100; i++) {
   arrayOfLinks.push(fetch(`https://jsonplaceholder.typicode.com/todos/${i}`));
 }
 
-(async () => {
-  for await (let promise of handlePromisesGenerator(arrayOfLinks)) {
-    console.log(promise);
-  }
-})();
+for await (const promise of handlePromisesGenerator(arrayOfLinks)) {
+  console.log(promise);
+}

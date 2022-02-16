@@ -21,7 +21,7 @@ const Publisher = {
 
 const publisherFactory = (candidate) => {
   candidate.subscribers = [];
-  for (method in Publisher) {
+  for (const method in Publisher) {
     candidate[method] = Publisher[method];
   }
 };

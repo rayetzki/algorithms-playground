@@ -1,8 +1,8 @@
-let i = 0;
-
 class Future {
+  #i = 0;
+
   constructor(executor) {
-    this.id = i++;
+    this.id = this.#i++;
     console.log(`new Future ${this.id}`);
     this.executor = executor;
   }
@@ -35,7 +35,6 @@ class Future {
     this.executor(successed, failed);
   }
 }
-
 
 Future.of(5)
   .map(x => ++x)
