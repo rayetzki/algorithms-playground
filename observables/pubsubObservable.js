@@ -21,7 +21,7 @@ const Publisher = {
 
 const publisherFactory = (candidate) => {
   candidate.subscribers = [];
-  for (const method in Publisher) {
+  for (const method of Publisher) {
     candidate[method] = Publisher[method];
   }
 };
@@ -51,8 +51,8 @@ const blogger = new Reader();
 
 publisherFactory(paper);
 
-paper.subscribe(blogger.drinkCoffee);
-paper.subscribe(blogger.sundayPreNap, "monthly");
+paper.subscribe(blogger.drinkCoffee.bind(blogger));
+paper.subscribe(blogger.sundayPreNap.bind(blogger), "monthly");
 
 paper.daily();
 paper.monthly();

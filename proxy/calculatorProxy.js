@@ -1,48 +1,44 @@
 class Calculator {
     add(a, b) {
-        return a + b
+        return a + b;
     }
 
     subtract(a, b) {
-        return a - b
+        return a - b;
     }
 
     multiply(a, b) {
-        return a * b
+        return a * b;
     }
 
     divide(a, b) {
-        return a / b
+        return a / b;
     }
 }
 
 const executeOperations = (operations, args) => {
-    return operations.reduce((args, method) => {
-        return [method(...args)]
-    }, args)
-}
+    return operations.reduce((args, method) => [method(...args)], args);
+};
 
-const $ = Symbol('RESULT_ARGUMENT')
+const $ = Symbol('RESULT_ARGUMENT');
 
 const lazify = (instance) => {
-    const operations = []
+    const operations = [];
 
     const proxy = new Proxy(instance, {
         get(target, propKey) {
-            const propertyOrMethod = target[propKey]
+            const propertyOrMethod = target[propKey];
 
             if (propKey === 'run') {
-                return (...args) => {
-                    return executeOperations(operations, args)[0]
-                }
+                return (...args) => executeOperations(operations, args)[0];
             }
 
             if (!propertyOrMethod) {
-                throw new Error('No property found.')
+                throw new Error('No property found.');
             }
 
             if (typeof propertyOrMethod !== 'function') {
-                return target[propKey]
+                return target[propKey];
             }
 
             return (...args) => {
@@ -51,21 +47,21 @@ const lazify = (instance) => {
                         target,
                         [...args].map(arg => (arg === $ ? internalResult : arg))
                     )
-                })
+                });
 
-                return proxy
-            }
-        }
-    })
+                return proxy;
+            };
+        },
+    });
 
-    return proxy
-}
+    return proxy;
+};
 
-const lazyCalculator = lazify(new Calculator())
+const lazyCalculator = lazify(new Calculator());
 
 const a = lazyCalculator
  .add(5, 10)
  .subtract($, 5)
- .multiply($, 10)
+ .multiply($, 10);
 
-console.log(a.run())
+console.log(a.run());
