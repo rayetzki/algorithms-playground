@@ -1,12 +1,10 @@
-import fetch from "node-fetch";
-
 async function* handlePromisesGenerator(arrayOfLinks) {
   for (const promise of arrayOfLinks) {
     try {
       const response = await promise;
       if (response) {
         yield {
-          response: response.json(),
+          response: await response.json(),
           status: "resolved",
         };
       }
