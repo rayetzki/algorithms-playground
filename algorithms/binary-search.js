@@ -1,4 +1,4 @@
-function binarySearch(list, element) {
+const binarySearch = (list, element) => {
   let left = 0, right = list.length - 1;
 
   while (left <= right) {
@@ -16,8 +16,4 @@ function binarySearch(list, element) {
   return -1;
 }
 
-const list = new Array(100).fill(0).map((_, i) => Math.random() * i);
-
-console.time();
-console.log(binarySearch(list, list.at(-1)));
-console.timeEnd();
+export default binarySearch;
