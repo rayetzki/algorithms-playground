@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Timer</title>
+</head>
+<body>
+  <time is="live-timer"></time>
+  <script>
+    class LiveTimer extends HTMLTimeElement {
+      constructor() {
+        super();
+        this.renderDate(Date.now());
+      }
+
+      renderDate(date) {
+        this.innerHTML = new Intl.DateTimeFormat("ru", {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric"
+        }).format(date);
+      }
+
+      connectedCallback() {
+        if (!this.rendered) {
+          this.renderDate();
+          this.rendered = true;
+          setInterval(() => this.setAttribute('datetime', Date.now()), 1000);
+        }
+      }
+
+      static get observedAttributes() {
+        return ['datetime'];
+      }
+
+      attributeChangedCallback() {
+        this.renderDate(Date.now());
+      }
+    }
+
+    customElements.define('live-timer', LiveTimer, { extends: 'time' });
+  </script>
+</body>
+</html>
