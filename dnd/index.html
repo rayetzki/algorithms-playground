@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List Drag'n'Drop</title>
+	<style>
+		body {
+			margin: 0;
+		}
+
+		h2 {
+			margin: 1em 1.5em;
+		}
+
+		.list {
+			list-style-type: none;
+		}
+
+		.list__item {
+			margin: 1em 0;
+			padding: 1em;
+			width: 10em;
+			text-align: center;
+			border: 2px dashed tomato;
+		}
+  </style>
+</head>
+<body>
+  <main>
+		<h2>To-Do List</h2>
+		<ul class="list">
+			<li draggable="true" class="list__item">Wash Dishes</li>
+			<li draggable="true" class="list__item">Clean House</li>
+			<li draggable="true" class="list__item">Buy food</li>
+		</ul>
+  </main>
+	
+	<script>
+		const todoList = document.querySelector('.list');
+		const todoListItems = Array.from(todoList.children);
+
+		function dragStart(event) {
+			event.target.classList.add('dragging');
+		}
+		
+		function dragFinish(event) {
+			event.target.classList.remove('dragging');
+		}
+
+		function getNextElement(cursorPosition, currentElement) {
+			const { y, height } = currentElement.getBoundingClientRect();
+			const currentElementCenter = y + height / 2;
+			return (cursorPosition < currentElementCenter) ? currentElement : currentElement.nextElementSibling;
+		}	
+
+		function dragOver(event) {
+			event.preventDefault();
+			const currentElement = event.target;
+			const activeElement = this.querySelector('.dragging');
+			const isMoveable = activeElement !== currentElement && currentElement.classList.contains('list__item');
+			if (!isMoveable) return;
+			const nextElement = getNextElement(event.clientY, currentElement);
+			if (nextElement && activeElement === nextElement.previousElementSibling || activeElement === nextElement) return;
+			this.insertBefore(activeElement, nextElement);
+		}
+
+		todoListItems.forEach(item => {
+			item.addEventListener('dragstart', dragStart);
+			item.addEventListener('dragend', dragFinish);
+		});
+
+		todoList.addEventListener('dragover', dragOver);
+	</script>
+</body>
+</html>
